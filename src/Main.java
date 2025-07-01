@@ -1,11 +1,11 @@
 import java.util.*;
 
 class Bike {
-    private String bikeId;
-    private String brand;
-    private String model;
-    private double basePricePerDay;
-    private boolean isAvailable;
+    public String bikeId;
+    public String brand;
+    public String model;
+    public double basePricePerDay;
+    public boolean isAvailable;
 
     public Bike(String bikeId, String brand, String model, double basePricePerDay) {
         this.bikeId = bikeId;
@@ -86,9 +86,9 @@ class Rental {
 }
 
 class BikeRentalSystem {
-    private List<Bike> bikes;
-    private List<Customer> customers;
-    private List<Rental> rentals;
+    public List<Bike> bikes;
+    public List<Customer> customers;
+    public List<Rental> rentals;
 
     public BikeRentalSystem() {
         bikes = new ArrayList<>();
@@ -99,155 +99,35 @@ class BikeRentalSystem {
     public void addBike(Bike bike) {
         bikes.add(bike);
     }
-
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
-    }
-
-    public void rentBike(Bike bike, Customer customer, int days) {
-        if (bike.isAvailable()) {
-            bike.rent();
-            rentals.add(new Rental(bike, customer, days));
-
-        } else {
-            System.out.println("Bike is not available for rent.");
-        }
-    }
-
-    public void returnBike(Bike bike) {
-        bike.returnBike();
-        Rental rentalToRemove = null;
-        for (Rental rental : rentals) {
-            if (rental.getBike() == bike) {
-                rentalToRemove = rental;
-                break;
-            }
-        }
-        if (rentalToRemove != null) {
-            rentals.remove(rentalToRemove);
-
-        } else {
-            System.out.println("Bike was not rented.");
-        }
-    }
-
-    public void menu() {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.println("===== Bike Rental System =====");
-            System.out.println("1. Rent a Bike");
-            System.out.println("2. Return a Bike");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
-            if (choice == 1) {
-                System.out.println("\n== Rent a Bike ==\n");
-                System.out.print("Enter your name: ");
-                String customerName = scanner.nextLine();
-
-                System.out.println("\nAvailable Bikes:");
-                for (Bike bike : bikes) {
-                    if (bike.isAvailable()) {
-                        System.out.println(bike.getBikeId() + " - " + bike.getBrand() + " " + bike.getModel());
-                    }
-                }
-
-                System.out.print("\nEnter the bike ID you want to rent: ");
-                String bikeId = scanner.nextLine();
-
-                System.out.print("Enter the number of days for rental: ");
-                int rentalDays = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
-
-                Customer newCustomer = new Customer("CUS" + (customers.size() + 1), customerName);
-                addCustomer(newCustomer);
-
-                Bike selectedBike = null;
-                for (Bike bike : bikes) {
-                    if (bike.getBikeId().equals(bikeId) && bike.isAvailable()) {
-                        selectedBike = bike;
-                        break;
-                    }
-                }
-
-                if (selectedBike != null) {
-                    double totalPrice = selectedBike.calculatePrice(rentalDays);
-                    System.out.println("\n== Rental Information ==\n");
-                    System.out.println("Customer ID: " + newCustomer.getCustomerId());
-                    System.out.println("Customer Name: " + newCustomer.getName());
-                    System.out.println("Bike: " + selectedBike.getBrand() + " " + selectedBike.getModel());
-                    System.out.println("Rental Days: " + rentalDays);
-                    System.out.printf("Total Price: $%.2f%n", totalPrice);
-
-                    System.out.print("\nConfirm rental (Y/N): ");
-                    String confirm = scanner.nextLine();
-
-                    if (confirm.equalsIgnoreCase("Y")) {
-                        rentBike(selectedBike, newCustomer, rentalDays);
-                        System.out.println("\nBike rented successfully.");
-                    } else {
-                        System.out.println("\nRental canceled.");
-                    }
-                } else {
-                    System.out.println("\nInvalid bike selection or bike not available for rent.");
-                }
-            } else if (choice == 2) {
-                System.out.println("\n== Return a Bike ==\n");
-                System.out.print("Enter the bike ID you want to return: ");
-                String bikeId = scanner.nextLine();
-
-                Bike bikeToReturn = null;
-                for (Bike bike : bikes) {
-                    if (bike.getBikeId().equals(bikeId) && !bike.isAvailable()) {
-                        bikeToReturn = bike;
-                        break;
-                    }
-                }
-
-                if (bikeToReturn != null) {
-                    Customer customer = null;
-                    for (Rental rental : rentals) {
-                        if (rental.getBike() == bikeToReturn) {
-                            customer = rental.getCustomer();
-                            break;
-                        }
-                    }
-
-                    if (customer != null) {
-                        returnBike(bikeToReturn);
-                        System.out.println("Bike returned successfully by " + customer.getName());
-                    } else {
-                        System.out.println("Bike was not rented or rental information is missing.");
-                    }
-                } else {
-                    System.out.println("Invalid bike ID or bike is not rented.");
-                }
-            } else if (choice == 3) {
-                break;
-            } else {
-                System.out.println("Invalid choice. Please enter a valid option.");
-            }
-        }
-
-        System.out.println("\nThank you for using the Bike Rental System!");
-    }
-
 }
-public class Main{
+
+public class Main {
     public static void main(String[] args) {
         BikeRentalSystem rentalSystem = new BikeRentalSystem();
 
-        Bike bike1 = new Bike("B001", "Hero", "Glamour", 60.0); // Different base price per day for each bike
-        Bike bike2 = new Bike("B002", "TVS", "Apache180", 70.0);
-        Bike bike3 = new Bike("B003", "Honda", "Shine", 60.0);
-        rentalSystem.addBike(bike1);
-        rentalSystem.addBike(bike2);
-        rentalSystem.addBike(bike3);
+        String[][] bikeData = {
+                {"B001", "Hero", "Glamour", "500"},
+                {"B002", "TVS", "Apache 180", "750"},
+                {"B003", "Honda", "Shine", "550"},
+                {"B004", "Yamaha", "FZ-S", "500"},
+                {"B005", "Bajaj", "Pulsar 150", "600"},
+                {"B006", "Suzuki", "Gixxer", "650"},
+                {"B007", "Royal Enfield", "Bullet 350", "1000"},
+                {"B008", "KTM", "Duke 200", "1000"},
+                {"B009", "BMW", "G310R", "1800"},
+                {"B010", "Harley-Davidson", "Street 750", "2500"}
+        };
 
-        rentalSystem.menu();
+        for (String[] data : bikeData) {
+            Bike bike = new Bike(
+                    data[0],
+                    data[1],
+                    data[2],
+                    Double.parseDouble(data[3])
+            );
+            rentalSystem.addBike(bike);
+        }
+
+        new BikeGUI(rentalSystem);
     }
 }
